@@ -1,0 +1,5 @@
+// this is a comment
+"hola como \n estas"
+if hola while test else true
+(( )){} // grouping stuff
+!*+-/=<> <= == // operators
