@@ -14,12 +14,17 @@ import java.util.List;
 
 public class Lox {
     
+    private static final Interpreter interpreter = new Interpreter(); 
     static boolean hadError = false;
+    static boolean hadRuntimeError = false;
 
     // Load source file and execute 
     private static void runFile(String path) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
         run(new String(bytes, Charset.defaultCharset()));
+        //Indicate an error in the exit code
+        if(hadError) System.exit(65);
+        if(hadRuntimeError) System.exit(70);
     }
     
     // Execute code from terminal
@@ -38,8 +43,9 @@ public class Lox {
     
     // Run scanner
     private static void run(String source) {
+        //TODO: Check if this code goes in here
         //Indicate an error in the exit code
-        if(hadError) System.exit(65);
+        //if(hadError) System.exit(65);
 
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
@@ -49,11 +55,16 @@ public class Lox {
         // Stop if there was a syntax error
         if(hadError) return;
         
-        System.out.println(new AstPrinter().print(expression));
+    interpreter.interpret(expression);    
     } 
 
     static void error(int line, String message) {
         report(line, "", message);
+    }
+    
+    static void runtimeError(RuntimeError error) {
+        System.err.println(error.getMessage() + "\n[line" + error.token.line+"]");
+        hadRuntimeError = true;
     }
 
     private static void report(int line, String where, String message) {
