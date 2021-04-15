@@ -25,6 +25,19 @@ class AstPrinter implements Expr.Visitor<String> {
     public String visitUnaryExpr(Expr.Unary expr) {
         return parethesize(expr.operator.lexeme, expr.right);
     }
+    
+    @Override
+    public String visitVariableExpr(Expr.Variable expr)
+    {
+        //TODO: Function not implemented! 
+        return null;
+    }
+
+    @Override
+    public String visitAssignExpr(Expr.Assign expr) {
+        //TODO: Function not implemented! 
+        return null;
+    }
 
     private String parethesize(String name, Expr... exprs) {
         StringBuilder builder = new StringBuilder();

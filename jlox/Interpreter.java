@@ -1,12 +1,17 @@
 package com.lox;
 
-class Interpreter implements Expr.Visitor<Object> {
-    
-    void interpret(Expr expression) {
+import java.util.List;
+
+class Interpreter implements Expr.Visitor<Object>,
+                             Stmt.Visitor<Void> {
+   
+    private Environment environment = new Environment();
+ 
+    void interpret(List<Stmt> statements) {
         try {
-            Object value = evaluate(expression);
-            System.out.println(stringify(value));
-        
+            for(Stmt statement : statements) {
+                execute(statement); 
+            } 
         } catch(RuntimeError error) {
             Lox.runtimeError(error);
         }
@@ -81,6 +86,13 @@ class Interpreter implements Expr.Visitor<Object> {
         return null; 
     }
 
+
+    @Override
+    public Object visitVariableExpr(Expr.Variable expr)
+    {
+        return environment.get(expr.name);
+    }
+
     private void checkNumberOperand(Token operator, Object operand) {
         if(operand instanceof Double) return;
         throw new RuntimeError(operator, "Operand must be a number."); 
@@ -119,5 +131,42 @@ class Interpreter implements Expr.Visitor<Object> {
 
     private Object evaluate(Expr expr) {
         return expr.accept(this);
+    }
+    
+    private void execute(Stmt stmt) {
+        stmt.accept(this);
+    }
+
+    @Override
+    public Void visitExpressionStmt(Stmt.Expression stmt)
+    {
+        evaluate(stmt.expression);
+        return null;
+    }
+
+    @Override
+    public Void visitPrintStmt(Stmt.Print stmt)
+    {
+        Object value = evaluate(stmt.expression);
+        System.out.println(stringify(value));
+        return null;
+    }
+    
+    @Override
+    public Void visitVarStmt(Stmt.Var stmt) {
+        Object value = null;
+        if(stmt.initializer != null) {
+            value = evaluate(stmt.initializer);
+        }
+
+        environment.define(stmt.name.lexeme, value);
+        return null;
+    }
+    
+    @Override
+    public Object visitAssignExpr(Expr.Assign expr) {
+        Object value = evaluate(expr.value);
+        environment.assign(expr.name, value);
+        return value;
     }
 }
