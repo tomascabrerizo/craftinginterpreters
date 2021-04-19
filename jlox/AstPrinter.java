@@ -40,8 +40,13 @@ class AstPrinter implements Expr.Visitor<String> {
     }
 
     @Override
-    public String visitLogicalExpr(Expr.Logical expr)
-    {
+    public String visitLogicalExpr(Expr.Logical expr) {
+        //TODO: Function not implemented! 
+        return null;
+    }
+    
+    @Override
+    public String visitCallExpr(Expr.Call expr) {
         //TODO: Function not implemented! 
         return null;
     }
