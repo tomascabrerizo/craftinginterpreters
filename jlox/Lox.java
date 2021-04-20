@@ -43,10 +43,6 @@ public class Lox {
     
     // Run scanner
     private static void run(String source) {
-        //TODO: Check if this code goes in here
-        //Indicate an error in the exit code
-        //if(hadError) System.exit(65);
-
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
         Parser parser = new Parser(tokens);
@@ -54,7 +50,13 @@ public class Lox {
 
         // Stop if there was a syntax error
         if(hadError) return;
+
+        Resolver resolver = new Resolver(interpreter);
+        resolver.resolve(statements);
         
+        // Stop if there was a resolution error
+        if(hadError) return;
+         
         interpreter.interpret(statements);    
     } 
 
