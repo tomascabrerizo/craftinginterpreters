@@ -12,7 +12,7 @@ class Interpreter implements Expr.Visitor<Object>,
     Interpreter() {
         globals.define("clock", new LoxCallable() {
             @Override 
-            public int arity() { return 0;}
+            public int arity() { return 0; }
             
             @Override 
             public Object call(Interpreter interpreter, List<Object> arguments) {
@@ -190,6 +190,10 @@ class Interpreter implements Expr.Visitor<Object>,
         stmt.accept(this);
     }
     
+    void resolve(Expr expr, int depth) {
+        //locals.put(expr, depth);
+    }
+
     void executeBlock(List<Stmt> statements, Environment environment) {
         Environment previous = this.environment;
         try {
