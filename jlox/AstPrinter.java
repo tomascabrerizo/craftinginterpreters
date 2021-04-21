@@ -51,6 +51,18 @@ class AstPrinter implements Expr.Visitor<String> {
         return null;
     }
 
+    @Override
+    public String visitGetExpr(Expr.Get expr) {
+        //TODO: Function not implemented! 
+        return null;
+    }
+    
+    @Override
+    public String visitSetExpr(Expr.Set expr) {
+        //TODO: Function not implemented! 
+        return null;
+    }
+    
     private String parethesize(String name, Expr... exprs) {
         StringBuilder builder = new StringBuilder();
         

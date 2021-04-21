@@ -1,13 +1,6 @@
 
-var a = "global";
+class Bagle {}
 
+var bagle = Bagle();
 
-{
-    fun showA() {
-        print a;
-    }
-
-    showA();
-    var a = "block";
-    showA();
-}
+print bagle;
