@@ -63,6 +63,12 @@ class AstPrinter implements Expr.Visitor<String> {
         return null;
     }
     
+    @Override
+    public String visitThisExpr(Expr.This expr) {
+        //TODO: Function not implemented! 
+        return null;
+    }
+
     private String parethesize(String name, Expr... exprs) {
         StringBuilder builder = new StringBuilder();
         
