@@ -28,7 +28,6 @@ Value pop() {
     return *vm.stackTop;
 }
 
-#if 0
 static InterpretResult run() {
 #define READ_BYTES() (*vm.ip++)
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTES()])
@@ -76,9 +75,21 @@ static InterpretResult run() {
 #undef READ_BYTES
 #undef READ_CONSTANT
 }
-#endif
 
 InterpretResult interpret(const char* source) {
-    compile(source);
-    return INTERPRET_OK;
+    Chunk chunk;
+    initChunk(&chunk);
+
+    if(!compile(source, &chunk)) {
+        freeChunk(&chunk);
+        return INTERPRET_COMPILE_ERROR;
+    }
+
+    vm.chunk = &chunk;
+    vm.ip = vm.chunk->code;
+    
+    InterpretResult result = run();
+    
+    freeChunk(&chunk);
+    return result;
 }
